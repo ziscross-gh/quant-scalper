@@ -1,0 +1,33 @@
+# Core dependencies
+ibapi>=10.19.1                # IBKR Python API
+pyyaml>=6.0                   # Configuration parsing
+aiohttp>=3.9.0                # Async HTTP for Telegram
+
+# Data processing
+pandas>=2.0.0                 # Data manipulation (for backtesting)
+numpy>=1.24.0                 # Numerical operations
+
+# Database
+sqlalchemy>=2.0.0             # ORM (optional, SQLite works directly)
+
+# Telegram bot (optional - for command handling)
+python-telegram-bot>=20.0     # Only if using command handler
+
+# API server (optional - for dashboard)
+fastapi>=0.100.0              # REST API
+uvicorn>=0.22.0               # ASGI server
+
+# Development
+pytest>=7.0.0                 # Testing
+pytest-asyncio>=0.21.0        # Async test support
+pytest-benchmark>=4.0.0       # Performance benchmarks
+
+# Build tools
+maturin>=1.0.0                # Rust-Python build
+
+# Optional - Monitoring
+psutil>=5.9.0                 # System monitoring
+
+# Optional - Type checking
+mypy>=1.0.0
+types-PyYAML

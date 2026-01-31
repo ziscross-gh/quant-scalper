@@ -1,0 +1,74 @@
+# Quant Scalping Bot Configuration
+# =================================
+# Copy this to config.yaml and fill in your values
+
+# Strategy Parameters
+strategy:
+  lookback_period: 20          # Bars for Z-Score calculation
+  z_threshold_entry: 2.0       # Enter when |Z| >= this
+  z_threshold_exit: 0.5        # Exit when |Z| <= this (mean reversion)
+  min_volume: 100              # Minimum bar volume to trade
+
+# Risk Management
+risk:
+  max_position_size: 2         # Maximum contracts at any time
+  stop_loss_dollars: 200       # Per contract stop loss
+  take_profit_dollars: 300     # Per contract take profit
+  max_daily_loss: 500          # Hard stop for the day
+  max_consecutive_losses: 3    # Pause trading after this many
+  max_position_duration_hours: 2.0  # Force close if held longer
+
+# IBKR Connection
+ibkr:
+  host: "127.0.0.1"
+  port: 4002                   # Paper: 4002, Live: 4001
+  client_id: 1
+  account: ""                  # Your IBKR account ID (e.g., DU123456)
+  paper: true                  # SAFETY: Set to false ONLY for live trading
+  reconnect_delay: 10          # Seconds between reconnect attempts
+  max_reconnect_attempts: 5
+
+# Instruments to Trade
+instruments:
+  - symbol: "MES"              # Micro E-mini S&P 500
+    exchange: "CME"
+    sec_type: "FUT"
+    expiry: "202503"           # Update to current front month
+    multiplier: 5              # $5 per point
+    tick_size: 0.25            # Minimum price increment
+    tick_value: 1.25           # Value of one tick ($5 * 0.25)
+
+# Telegram Alerts
+# Get your bot token from @BotFather
+# Get your chat ID from @userinfobot
+alerts:
+  telegram:
+    enabled: true
+    bot_token: "${TELEGRAM_BOT_TOKEN}"   # Set via environment variable
+    chat_id: "${TELEGRAM_CHAT_ID}"       # Set via environment variable
+
+# Logging Configuration
+logging:
+  level: "INFO"                # DEBUG, INFO, WARNING, ERROR
+  file: "logs/bot.log"
+  max_size_mb: 10
+  backup_count: 5
+
+# Database
+database:
+  url: "sqlite:///data/trades.db"
+  echo: false                  # Set true to log SQL queries (debug)
+
+# Trading Hours (US Eastern Time)
+# Bot only trades during these hours
+trading_hours:
+  start: "09:30"
+  end: "16:00"
+  timezone: "America/New_York"
+  days: [0, 1, 2, 3, 4]        # Monday=0 through Friday=4
+
+# Development/Debug Options
+debug:
+  dry_run: false               # Log signals without executing orders
+  log_all_bars: false          # Log every incoming bar
+  save_market_data: false      # Save raw market data to CSV

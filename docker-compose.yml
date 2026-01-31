@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  trading-bot:
+    build: .
+    container_name: quant-scalper
+    restart: unless-stopped
+    environment:
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
+    volumes:
+      - ./config/config.yaml:/app/config/config.yaml:ro
+      - ./logs:/app/logs
+      - ./data:/app/data
+    network_mode: "host"  # To access IB Gateway on localhost
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Optional: IB Gateway container
+  # Uncomment if you want to run IB Gateway in Docker
+  # ib-gateway:
+  #   image: ghcr.io/gnzsnz/ib-gateway:latest
+  #   container_name: ib-gateway
+  #   restart: unless-stopped
+  #   environment:
+  #     - TWS_USERID=${IB_USERNAME}
+  #     - TWS_PASSWORD=${IB_PASSWORD}
+  #     - TRADING_MODE=paper
+  #     - VNC_SERVER_PASSWORD=vncpassword
+  #   ports:
+  #     - "4002:4002"  # Paper trading port
+  #     - "5900:5900"  # VNC for monitoring
