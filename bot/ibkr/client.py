@@ -142,11 +142,16 @@ class IBKRClient(EClient):
         loop = asyncio.get_event_loop()
 
         def _connect():
-            self.connect(self.host, self.port, self.client_id)
+            super(IBKRClient, self).connect(self.host, self.port, self.client_id)
+
+        def _run():
+            self.run()
 
         try:
             await asyncio.wait_for(loop.run_in_executor(None, _connect), timeout=timeout)
-            await asyncio.sleep(1)  # Wait for connection to establish
+            # Start message processing thread
+            loop.run_in_executor(None, _run)
+            await asyncio.sleep(2)  # Wait for connection to establish
 
             # Check if we got a valid order ID (indicates successful connection)
             if self.wrapper.get_next_order_id() is not None:
@@ -168,7 +173,7 @@ class IBKRClient(EClient):
         """Disconnect from IBKR"""
         if self.connected:
             logger.info("Disconnecting from IBKR Gateway")
-            self.disconnect()
+            super().disconnect()
             self.connected = False
 
     def _get_next_req_id(self) -> int:
@@ -179,16 +184,16 @@ class IBKRClient(EClient):
     async def subscribe_realtime_bars(
         self,
         contract: Contract,
-        bar_size: int = 5,  # 5-second bars
         callback: Callable[[BarData], None],
+        bar_size: int = 5,  # 5-second bars
     ) -> int:
         """
         Subscribe to real-time bar data.
 
         Args:
             contract: IBKR Contract to subscribe to
-            bar_size: Bar size in seconds (5 for 5-second bars)
             callback: Function to call for each bar
+            bar_size: Bar size in seconds (5 for 5-second bars)
 
         Returns:
             Request ID for the subscription
