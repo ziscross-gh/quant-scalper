@@ -1,5 +1,5 @@
 # Core dependencies
-ibapi>=10.19.1                # IBKR Python API
+ibapi>=9.81.1                 # IBKR Python API
 pyyaml>=6.0                   # Configuration parsing
 aiohttp>=3.9.0                # Async HTTP for Telegram
 
