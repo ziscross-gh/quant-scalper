@@ -169,7 +169,7 @@ class TradingBot:
 
         # Disconnect IBKR
         if self.ibkr_client:
-            await self.ibkr_client.disconnect()
+            await self.ibkr_client.disconnect_async()
 
         # Stop alerts
         if self.alerts:

@@ -169,12 +169,16 @@ class IBKRClient(EClient):
             logger.exception(f"❌ Failed to connect to IBKR: {e}")
             return False
 
-    async def disconnect(self):
-        """Disconnect from IBKR"""
+    def disconnect(self):
+        """Synchronous disconnect from IBKR"""
         if self.connected:
             logger.info("Disconnecting from IBKR Gateway")
             super().disconnect()
             self.connected = False
+
+    async def disconnect_async(self):
+        """Async version of disconnect"""
+        self.disconnect()
 
     def _get_next_req_id(self) -> int:
         """Get next request ID"""
@@ -324,7 +328,7 @@ async def test_connection():
         # Wait a bit
         await asyncio.sleep(2)
 
-        await client.disconnect()
+        await client.disconnect_async()
     else:
         print("❌ Failed to connect to IBKR")
         print("\nMake sure IB Gateway/TWS is running and:")
