@@ -11,14 +11,14 @@ crate-type = ["cdylib"]
 
 [dependencies]
 pyo3 = { version = "0.20", features = ["extension-module"] }
-parking_lot = "0.12"
 
 [dev-dependencies]
 criterion = "0.5"
 
-[[bench]]
-name = "zscore_bench"
-harness = false
+# Benchmarks will be added when needed
+# [[bench]]
+# name = "zscore_bench"
+# harness = false
 
 [profile.release]
 lto = true
