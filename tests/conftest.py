@@ -13,8 +13,8 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from bot.config import (
-    Config, TradingConfig, IBKRConfig, RiskConfig,
-    TelegramConfig, DatabaseConfig, DebugConfig
+    Config, StrategyConfig, IBKRConfig, RiskConfig,
+    TelegramConfig, DatabaseConfig, TradingHoursConfig, DebugConfig
 )
 
 
@@ -76,11 +76,13 @@ def sample_config(sample_config_dict, temp_dir) -> Config:
     sample_config_dict["database"]["path"] = str(temp_dir / "trades.db")
 
     return Config(
-        trading=TradingConfig(**sample_config_dict["trading"]),
+        strategy=StrategyConfig(**sample_config_dict["trading"]),
         ibkr=IBKRConfig(**sample_config_dict["ibkr"]),
         risk=RiskConfig(**sample_config_dict["risk"]),
-        telegram=TelegramConfig(**sample_config_dict["telegram"]),
+        alerts=sample_config_dict["telegram"],
+        logging=sample_config_dict["debug"],
         database=DatabaseConfig(**sample_config_dict["database"]),
+        trading_hours=TradingHoursConfig(),
         debug=DebugConfig(**sample_config_dict["debug"])
     )
 

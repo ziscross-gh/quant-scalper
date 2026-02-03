@@ -59,13 +59,31 @@ database:
   url: "sqlite:///data/trades.db"
   echo: false                  # Set true to log SQL queries (debug)
 
-# Trading Hours (US Eastern Time)
-# Bot only trades during these hours
+# Trading Hours (CME Futures Hours)
+# ================================
+# The bot uses CME Globex futures hours for MES (Micro E-mini S&P 500):
+# - Sunday 5:00 PM CT through Friday 4:00 PM CT
+# - Daily maintenance break: 4:00 PM - 5:00 PM CT
+#
+# Trading Schedule (Central Time):
+# - Sunday:    5:00 PM - 4:00 PM (Monday)
+# - Monday:    5:00 PM - 4:00 PM (Tuesday) [after daily break]
+# - Tuesday:   5:00 PM - 4:00 PM (Wednesday) [after daily break]
+# - Wednesday: 5:00 PM - 4:00 PM (Thursday) [after daily break]
+# - Thursday:  5:00 PM - 4:00 PM (Friday) [after daily break]
+# - Friday:    5:00 PM - 4:00 PM (Saturday, then CLOSED)
+# - Saturday:  CLOSED all day
+#
+# Implementation: Trading hours are enforced in bot/core/engine.py
+# using is_trading_allowed() from bot/utils/timezone.py
+#
+# Legacy config below maintained for backward compatibility but not actively used.
+# The bot uses CME futures hours which are implemented in code.
 trading_hours:
-  start: "09:30"
-  end: "16:00"
-  timezone: "America/New_York"
-  days: [0, 1, 2, 3, 4]        # Monday=0 through Friday=4
+  start: "17:00"                  # 5:00 PM CT (Sunday open)
+  end: "16:00"                    # 4:00 PM CT (Friday close)
+  timezone: "America/Chicago"        # CME uses Central Time
+  days: [0, 1, 2, 3, 4, 5, 6]  # All days (CME is 6 days/week)
 
 # Development/Debug Options
 debug:

@@ -112,6 +112,14 @@ class TradingEngine:
             return
 
         try:
+            # Check trading hours first (CME futures hours)
+            from ..utils.timezone import is_trading_allowed
+
+            if not is_trading_allowed():
+                # Market closed or maintenance window
+                logger.debug("Market closed - not processing signals")
+                return
+
             # Update Z-Score
             price = bar.get("close", bar.get("midPrice", 0))
             self.state.current_zscore = self.signal_gen.update(price)
